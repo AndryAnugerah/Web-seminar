@@ -1,0 +1,63 @@
+*,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+main {
+  flex-grow: 1; 
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: rgb(255, 255, 255);
+  font-family: Arial, sans-serif;
+}
+
+/* Navbar container: Flex antara logo dan nav kanan */
+.container-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+  height: 70px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Logo kiri */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logo img {
+  height: 50px;
+  width: auto;
+}
+
+/* Navbar kanan */
+.ul-navbar {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+.li-navbar a {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+}
+
+.li-navbar a:hover {
+  text-decoration: underline;
+}
+
+footer{
+  margin-top: auto;
+}

@@ -1,0 +1,80 @@
+/* Container utama untuk form login */
+.container-login {
+    background-color: #fff;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto; /* Menengahkan container secara horizontal dan memberi jarak dari header */
+    text-align: center;
+}
+
+/* Judul "Masuk AKUN" */
+.container-login h3 {
+    margin-bottom: 2rem;
+    text-decoration: underline;
+    color: #000000;
+    font-size: 1.5rem;
+}
+
+/* Grup input (untuk memberi jarak antar elemen) */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+/* Input text dan password */
+.container-login input[type="text"],
+.container-login input[type="password"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+/* Tombol */
+.btn {
+    width: 100%;
+    padding: 0.75rem;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Tombol "Masuk Sekarang" */
+.btn-login {
+    background-color: #007bff;
+    margin-top: 1rem;
+}
+
+.btn-login:hover {
+    background-color: #0056b3;
+}
+
+/* Teks "Belum punya akun?" */
+.container-login p {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Link untuk tombol "Daftar sekarang" */
+.container-login a {
+    text-decoration: none;
+    display: block;
+}
+
+/* Tombol "Daftar sekarang" */
+.btn-register {
+    background-color: #28a745;
+}
+
+.btn-register:hover {
+    background-color: #218838;
+}

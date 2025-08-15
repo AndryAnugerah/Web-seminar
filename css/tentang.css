@@ -1,0 +1,28 @@
+.content-container{
+    padding: 120px;
+    position: relative;
+
+}
+
+.content-container h1{
+    text-align: center;
+    text-transform: uppercase;
+    color: rgb(15, 38, 170);
+}
+
+.content-container h3{
+    text-align: center;
+}
+
+.content-container p{
+    text-indent: 50px;
+    text-align: justify;
+    letter-spacing: 2px;
+}
+
+.content-container img{
+    display: block; 
+    margin: 0 auto;
+    width: 500px;
+    height: auto;
+}
