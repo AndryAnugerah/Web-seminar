@@ -98,17 +98,7 @@ $statuses = ['pending'=>'Pending', 'diproses'=>'Diproses', 'selesai'=>'Selesai',
     <link rel="stylesheet" href="css/homee.css">
     <link rel="stylesheet" href="css/admin.css">
     <link rel="icon" type="image/png" href="image/seminar.png">
-    <style>
-        /* Warna status */
-        .status-pending { background-color: #fff3cd; } /* Kuning muda */
-        .status-diproses { background-color: #cce5ff; } /* Biru muda */
-        .status-selesai { background-color: #d4edda; } /* Hijau muda */
-        .status-batal { background-color: #f8d7da; } /* Merah muda */
-        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        h3 { margin-top: 30px; }
-    </style>
+
 </head>
 <body>
 <?php include 'navbar.php'; ?>
