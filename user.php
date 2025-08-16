@@ -11,17 +11,37 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'user') {
 // Proses form jika dikirim
 if (isset($_POST['pesan'])) {
     $user_id = $_SESSION['user']['id']; // ambil id user dari session
-    $produk_id = $_POST['seminar_id']; // sesuai kolom di tabel pesanan
+    $produk_id = (int)$_POST['seminar_id']; // sesuai kolom di tabel pesanan
     $jumlah = (int)$_POST['jumlah'];
 
-    // Insert ke tabel pesanan
-    $stmt = $koneksi->prepare("INSERT INTO pesanan (user_id, produk_id, jumlah) VALUES (?, ?, ?)");
-    $stmt->bind_param("iii", $user_id, $produk_id, $jumlah);
+    // Ambil stok saat ini dari tabel produk
+    $stmt = $koneksi->prepare("SELECT stok FROM produk WHERE id=?");
+    $stmt->bind_param("i", $produk_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $produk = $result->fetch_assoc();
+    $stmt->close();
 
-    if ($stmt->execute()) {
-        $success = "Tiket berhasil dipesan!";
+    if ($produk && $produk['stok'] >= $jumlah) {
+        // Insert ke tabel pesanan
+        $stmt = $koneksi->prepare("INSERT INTO pesanan (user_id, produk_id, jumlah, tanggal_pesan, status) VALUES (?, ?, ?, NOW(), 'pending')");
+        $stmt->bind_param("iii", $user_id, $produk_id, $jumlah);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+
+            // Kurangi stok produk
+            $stmt = $koneksi->prepare("UPDATE produk SET stok = stok - ? WHERE id=?");
+            $stmt->bind_param("ii", $jumlah, $produk_id);
+            $stmt->execute();
+            $stmt->close();
+
+            $success = "Tiket berhasil dipesan!";
+        } else {
+            $error = "Terjadi kesalahan: " . $koneksi->error;
+        }
     } else {
-        $error = "Terjadi kesalahan: " . $koneksi->error;
+        $error = "Stok tidak cukup untuk jumlah tiket yang dipesan!";
     }
 }
 

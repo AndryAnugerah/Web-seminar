@@ -84,14 +84,8 @@ if (isset($_POST['update_status'])) {
     exit;
 }
 
-// Ambil semua pesanan
-$pesanan = $koneksi->query("
-    SELECT p.id AS pesanan_id, u.username, pr.nama_produk, p.jumlah, p.tanggal_pesan, p.status
-    FROM pesanan p
-    JOIN user u ON p.user_id = u.id
-    JOIN produk pr ON p.produk_id = pr.id
-    ORDER BY p.tanggal_pesan DESC
-");
+// Daftar status
+$statuses = ['pending'=>'Pending', 'diproses'=>'Diproses', 'selesai'=>'Selesai', 'batal'=>'Batal'];
 ?>
 
 <!DOCTYPE html>
@@ -104,77 +98,105 @@ $pesanan = $koneksi->query("
     <link rel="stylesheet" href="css/homee.css">
     <link rel="stylesheet" href="css/admin.css">
     <link rel="icon" type="image/png" href="image/seminar.png">
+    <style>
+        /* Warna status */
+        .status-pending { background-color: #fff3cd; } /* Kuning muda */
+        .status-diproses { background-color: #cce5ff; } /* Biru muda */
+        .status-selesai { background-color: #d4edda; } /* Hijau muda */
+        .status-batal { background-color: #f8d7da; } /* Merah muda */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        h3 { margin-top: 30px; }
+    </style>
 </head>
 <body>
-    <?php include 'navbar.php'; ?>
+<?php include 'navbar.php'; ?>
 
-    <div class="container">
+<div class="container">
 
-        <!-- ================== PRODUK ================== -->
-        <h2>Kelola Produk</h2>
+    <!-- ================== PRODUK ================== -->
+    <h2>Kelola Produk</h2>
 
-        <?php if($editMode && $produk_edit): ?>
-            <h3>Edit Produk</h3>
-            <form method="POST">
-                <input type="text" name="nama_produk" value="<?= htmlspecialchars($produk_edit['nama_produk']) ?>" placeholder="Nama Produk" required>
-                <textarea name="deskripsi" placeholder="Deskripsi"><?= htmlspecialchars($produk_edit['deskripsi']) ?></textarea>
-                <input type="number" name="harga" value="<?= $produk_edit['harga'] ?>" step="0.01" placeholder="Harga" required>
-                <input type="number" name="stok" value="<?= $produk_edit['stok'] ?>" placeholder="Stok" required>
-                <input type="date" name="tanggal" value="<?= $produk_edit['tanggal'] ?>" required>
-                <button type="submit" name="update">Update Produk</button>
-            </form>
-            <a href="admin.php">Batal</a>
-        <?php else: ?>
-            <h3>Tambah Produk</h3>
-            <form method="POST">
-                <input type="text" name="nama_produk" placeholder="Nama Produk" required>
-                <textarea name="deskripsi" placeholder="Deskripsi"></textarea>
-                <input type="number" name="harga" placeholder="Harga" step="0.01" required>
-                <input type="number" name="stok" placeholder="Stok" required>
-                <input type="date" name="tanggal" required>
-                <button type="submit" name="tambah">Tambah Produk</button>
-            </form>
-        <?php endif; ?>
+    <?php if($editMode && $produk_edit): ?>
+        <h3>Edit Produk</h3>
+        <form method="POST">
+            <input type="text" name="nama_produk" value="<?= htmlspecialchars($produk_edit['nama_produk']) ?>" placeholder="Nama Produk" required>
+            <textarea name="deskripsi" placeholder="Deskripsi"><?= htmlspecialchars($produk_edit['deskripsi']) ?></textarea>
+            <input type="number" name="harga" value="<?= $produk_edit['harga'] ?>" step="0.01" placeholder="Harga" required>
+            <input type="number" name="stok" value="<?= $produk_edit['stok'] ?>" placeholder="Stok" required>
+            <input type="date" name="tanggal" value="<?= $produk_edit['tanggal'] ?>" required>
+            <button type="submit" name="update">Update Produk</button>
+        </form>
+        <a href="admin.php">Batal</a>
+    <?php else: ?>
+        <h3>Tambah Produk</h3>
+        <form method="POST">
+            <input type="text" name="nama_produk" placeholder="Nama Produk" required>
+            <textarea name="deskripsi" placeholder="Deskripsi"></textarea>
+            <input type="number" name="harga" placeholder="Harga" step="0.01" required>
+            <input type="number" name="stok" placeholder="Stok" required>
+            <input type="date" name="tanggal" required>
+            <button type="submit" name="tambah">Tambah Produk</button>
+        </form>
+    <?php endif; ?>
 
-        <h3>Daftar Produk</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nama Produk</th>
-                    <th>Deskripsi</th>
-                    <th>Harga</th>
-                    <th>Stok</th>
-                    <th>Tanggal</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if($produk->num_rows > 0): ?>
-                    <?php while($row = $produk->fetch_assoc()): ?>
-                        <tr>
-                            <td><?= $row['id'] ?></td>
-                            <td><?= htmlspecialchars($row['nama_produk']) ?></td>
-                            <td><?= htmlspecialchars($row['deskripsi']) ?></td>
-                            <td><?= number_format($row['harga'], 2) ?></td>
-                            <td><?= $row['stok'] ?></td>
-                            <td><?= $row['tanggal'] ?></td>
-                            <td>
-                                <a href="admin.php?id=<?= $row['id'] ?>">Edit</a> |
-                                <a href="admin.php?hapus=<?= $row['id'] ?>" onclick="return confirm('Yakin mau hapus?')">Hapus</a>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                <?php else: ?>
+    <h3>Daftar Produk</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nama Produk</th>
+                <th>Deskripsi</th>
+                <th>Harga</th>
+                <th>Stok</th>
+                <th>Tanggal</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if($produk->num_rows > 0): ?>
+                <?php while($row = $produk->fetch_assoc()): ?>
                     <tr>
-                        <td colspan="7" style="text-align:center; font-style:italic;">Belum ada produk.</td>
+                        <td><?= $row['id'] ?></td>
+                        <td><?= htmlspecialchars($row['nama_produk']) ?></td>
+                        <td><?= htmlspecialchars($row['deskripsi']) ?></td>
+                        <td><?= number_format($row['harga'], 2) ?></td>
+                        <td><?= $row['stok'] ?></td>
+                        <td><?= $row['tanggal'] ?></td>
+                        <td>
+                            <a href="admin.php?id=<?= $row['id'] ?>">Edit</a> |
+                            <a href="admin.php?hapus=<?= $row['id'] ?>" onclick="return confirm('Yakin mau hapus?')">Hapus</a>
+                        </td>
                     </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7" style="text-align:center; font-style:italic;">Belum ada produk.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 
-        <!-- ================== PESANAN ================== -->
-        <h2>Kelola Pesanan</h2>
+    <!-- ================== PESANAN ================== -->
+    <h2>Kelola Pesanan</h2>
+
+    <?php foreach($statuses as $status_key => $status_label):
+        $stmt = $koneksi->prepare("
+            SELECT p.id AS pesanan_id, u.username, pr.nama_produk, p.jumlah, p.tanggal_pesan, p.status
+            FROM pesanan p
+            JOIN user u ON p.user_id = u.id
+            JOIN produk pr ON p.produk_id = pr.id
+            WHERE p.status=?
+            ORDER BY p.tanggal_pesan DESC
+        ");
+        $stmt->bind_param("s", $status_key);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    ?>
+
+    <h3>Pesanan <?= $status_label ?></h3>
+    <?php if($result->num_rows > 0): ?>
         <table>
             <thead>
                 <tr>
@@ -187,36 +209,33 @@ $pesanan = $koneksi->query("
                 </tr>
             </thead>
             <tbody>
-                <?php if($pesanan->num_rows > 0): ?>
-                    <?php while($row = $pesanan->fetch_assoc()): ?>
-                        <tr>
-                            <td><?= $row['pesanan_id'] ?></td>
-                            <td><?= htmlspecialchars($row['username']) ?></td>
-                            <td><?= htmlspecialchars($row['nama_produk']) ?></td>
-                            <td><?= $row['jumlah'] ?></td>
-                            <td><?= $row['tanggal_pesan'] ?></td>
-                            <td>
-                                <form method="POST">
-                                    <input type="hidden" name="pesanan_id" value="<?= $row['pesanan_id'] ?>">
-                                    <select name="status" onchange="this.form.submit()">
-                                        <option value="pending" <?= $row['status']=='pending'?'selected':'' ?>>Pending</option>
-                                        <option value="diproses" <?= $row['status']=='diproses'?'selected':'' ?>>Diproses</option>
-                                        <option value="selesai" <?= $row['status']=='selesai'?'selected':'' ?>>Selesai</option>
-                                        <option value="batal" <?= $row['status']=='batal'?'selected':'' ?>>Batal</option>
-                                    </select>
-                                    <input type="hidden" name="update_status" value="1">
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="6" style="text-align:center; font-style:italic;">Belum ada pesanan.</td>
-                    </tr>
-                <?php endif; ?>
+                <?php while($row = $result->fetch_assoc()): ?>
+                <tr class="status-<?= strtolower($row['status']) ?>">
+                    <td><?= $row['pesanan_id'] ?></td>
+                    <td><?= htmlspecialchars($row['username']) ?></td>
+                    <td><?= htmlspecialchars($row['nama_produk']) ?></td>
+                    <td><?= $row['jumlah'] ?></td>
+                    <td><?= $row['tanggal_pesan'] ?></td>
+                    <td>
+                        <form method="POST">
+                            <input type="hidden" name="pesanan_id" value="<?= $row['pesanan_id'] ?>">
+                            <select name="status" onchange="this.form.submit()">
+                                <?php foreach($statuses as $s_key => $s_label): ?>
+                                <option value="<?= $s_key ?>" <?= $row['status']==$s_key?'selected':'' ?>><?= $s_label ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <input type="hidden" name="update_status" value="1">
+                        </form>
+                    </td>
+                </tr>
+                <?php endwhile; ?>
             </tbody>
         </table>
+    <?php else: ?>
+        <p>Tidak ada pesanan <?= strtolower($status_label) ?>.</p>
+    <?php endif; ?>
+    <?php endforeach; ?>
 
-    </div> <!-- Tutup container -->
+</div>
 </body>
 </html>
