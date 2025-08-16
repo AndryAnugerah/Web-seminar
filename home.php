@@ -7,24 +7,9 @@
     <link rel="stylesheet" href="css/stylee.css">
     <link rel="stylesheet" href="css/homee.css">
     <link rel="icon" type="image/png" href="image/seminar.png">
-
 </head>
-  <header>
-    <div class="container-navbar">
-        <div class="logo">
-            <img src="image/seminar.png" alt="Logo" />
-            <span>GO-Minar</span>
-        </div>
-        <ul class="ul-navbar">
-            <li class="li-navbar"><a href="home.php">HOME</a></li>
-            <li class="li-navbar"><a href="tentang.php">ABOUT</a></li>
-            <li class="li-navbar"><a href="kategori.php">CATEGORIES</a></li>
-            <li class="li-navbar"><a href="login.php">LOGIN</a></li>
-        </ul>
-    </div>
-    
-</header>
-
+<body>
+    <?php include 'navbar.php'; ?>
     <div class="content"> 
         <h1>HALOO TEMANN TEMANN!!</h3>
         <h3>Selamat Datang di GO-Minar!!</h1>
@@ -61,4 +46,5 @@
         <h2>Mulai jelajahi, temukan inspirasimu, dan wujudkan potensi terbaikmu bersama GO-Minar!</h2>
             
     </div>
+</body>
 </html>

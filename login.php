@@ -1,3 +1,38 @@
+<?php
+session_start();
+include "koneksi.php";
+
+if (isset($_POST['login'])) {
+    $username = mysqli_real_escape_string($koneksi, $_POST['username']);
+    $password = mysqli_real_escape_string($koneksi, $_POST['password']);
+
+    $query = mysqli_query($koneksi, 
+        "SELECT u.*, h.role 
+         FROM user u 
+         JOIN hak_akses h ON u.hak_akses_id = h.id 
+         WHERE username='$username'");
+
+    if (mysqli_num_rows($query) > 0) {
+        $data = mysqli_fetch_assoc($query);
+
+        if ($password === $data['password']) {
+            $_SESSION['user'] = $data;
+
+            if ($data['role'] == 'admin') {
+                header("Location: admin.php");
+            } else {
+                header("Location: user.php");
+            }
+            exit;
+        } else {
+            echo "<script>alert('Username/Password salah!');</script>";
+        }
+    } else {
+        echo "<script>alert('Username tidak ditemukan!');</script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,18 +62,18 @@
 <body>
     <div class="container-login">
         <h3>MASUK AKUN</h3>
-            <form>
+            <form action="" method="POST">
                 <div class="form-group">
                     <input type="text" placeholder="username" name="username"/>
                 </div>
                 <div class="form-group">
                     <input type="password" placeholder="password" name="password"/>
                 </div>
-                    <input type="button" value="Masuk Sekarang" class="btn btn-login">
+                    <input type="submit" name="login" value="Masuk Sekarang" class="btn btn-login">
             </form>
         <p>Belum punya akun?</p>
             <a href="register.php">
-                <input type="button" value="Daftar sekarang" class="btn btn-register">
+                <input type="submit" value="Daftar sekarang" class="btn btn-register">
         </a>
     </div>
 </body>

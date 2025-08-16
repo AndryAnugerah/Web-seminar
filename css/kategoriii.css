@@ -1,0 +1,28 @@
+/* Untuk memusatkan tabel */
+.table-container {
+    display: flex; /* Menggunakan flexbox untuk layout */
+    justify-content: center; /* Memusatkan item secara horizontal */
+    padding-top: 20px; /* Tambahkan jarak dari header */
+    padding-bottom: 20px;
+}
+
+/* Penyesuaian untuk tabelnya */
+table {
+    width: 90%; /* Atur lebar tabel agar tidak terlalu besar */
+    max-width: 1000px; /* Batasi lebar maksimal tabel */
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+table th, table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #007BFF;
+    color: #fff;
+    font-weight: 600;
+}

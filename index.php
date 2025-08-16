@@ -9,4 +9,10 @@
     <link rel="icon" type="image/png" href="image/seminar.png">
 
 </head>
+<body>
+    <?php
+    header("Location: home.php");
+    exit;
+    ?>
+</body>
 </html>

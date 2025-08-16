@@ -1,0 +1,118 @@
+/* ===== Style Umum ===== */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* ===== Judul ===== */
+h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* ===== Pesan Success / Error ===== */
+.success {
+    color: #2ecc71;
+    background-color: #eafaf1;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.error {
+    color: #e74c3c;
+    background-color: #fdecea;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* ===== Form ===== */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+form label {
+    font-weight: bold;
+}
+
+form select,
+form input[type="number"],
+form button {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+form button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: #2980b9;
+}
+
+/* ===== Tabel Riwayat Pesanan ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f1f1f1;
+}
+
+.status-pending {
+    color: #e67e22;
+    font-weight: bold;
+}
+
+.status-success {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+.status-cancel {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* ===== Responsif ===== */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    form input[type="number"],
+    form select,
+    form button {
+        font-size: 14px;
+    }
+}
