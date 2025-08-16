@@ -37,7 +37,7 @@ CREATE TABLE pesanan (
     produk_id INT NOT NULL,
     jumlah INT NOT NULL,
     tanggal_pesan DATETIME DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('pending', 'diproses', 'selesai', 'batal') DEFAULT 'diproses',
+    status ENUM('pending', 'diproses', 'selesai', 'batal') DEFAULT 'pending',
     FOREIGN KEY (user_id) REFERENCES user(id),
     FOREIGN KEY (produk_id) REFERENCES produk(id)
 );
@@ -45,4 +45,6 @@ CREATE TABLE pesanan (
 --memasukan role admin ke table hak_akses
 INSERT INTO hak_akses (role) VALUES ('admin'), ('user');
 
+-- kolom id pesanan untuk memunculkan id acak kepada user.
+ALTER TABLE pesanan ADD COLUMN id_pesanan VARCHAR(20) NULL;
 

@@ -8,6 +8,11 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 'user') {
     exit;
 }
 
+// Fungsi untuk generate ID Pesanan acak
+function generateRandomID($length = 8) {
+    return strtoupper(substr(bin2hex(random_bytes($length / 2)), 0, $length));
+}
+
 // Proses form jika dikirim
 if (isset($_POST['pesan'])) {
     $user_id = $_SESSION['user']['id']; // ambil id user dari session
@@ -46,12 +51,12 @@ if (isset($_POST['pesan'])) {
 }
 
 // Ambil daftar seminar
-$seminar = mysqli_query($koneksi, "SELECT * FROM produk"); 
+$seminar = mysqli_query($koneksi, "SELECT * FROM produk");
 
 // Ambil riwayat pesanan user
 $user_id = $_SESSION['user']['id'];
 $riwayat = mysqli_query($koneksi, "
-    SELECT p.id AS pesanan_id, pr.nama_produk, p.jumlah, p.tanggal_pesan, p.status
+    SELECT p.id AS pesanan_id, pr.nama_produk, p.jumlah, p.tanggal_pesan, p.status, p.id_pesanan
     FROM pesanan p
     JOIN produk pr ON p.produk_id = pr.id
     WHERE p.user_id = $user_id
@@ -108,16 +113,26 @@ $riwayat = mysqli_query($koneksi, "
                         <th>Jumlah</th>
                         <th>Tanggal Pesan</th>
                         <th>Status</th>
+                        <th>ID Pesanan</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php $no=1; while($row = mysqli_fetch_assoc($riwayat)): ?>
+                        <?php
+                        // Jika status selesai tapi id_pesanan kosong, generate dan simpan di DB
+                        if($row['status'] === 'selesai' && empty($row['id_pesanan'])) {
+                            $new_id = generateRandomID();
+                            mysqli_query($koneksi, "UPDATE pesanan SET id_pesanan='$new_id' WHERE id={$row['pesanan_id']}");
+                            $row['id_pesanan'] = $new_id;
+                        }
+                        ?>
                         <tr>
                             <td><?= $no++ ?></td>
                             <td><?= $row['nama_produk'] ?></td>
                             <td><?= $row['jumlah'] ?></td>
                             <td><?= $row['tanggal_pesan'] ?></td>
                             <td class="status-<?= strtolower($row['status']) ?>"><?= ucfirst($row['status']) ?></td>
+                            <td><?= $row['status'] === 'selesai' ? $row['id_pesanan'] : '-' ?></td>
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
